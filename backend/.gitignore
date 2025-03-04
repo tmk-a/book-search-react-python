@@ -1,0 +1,38 @@
+# Virtual environment
+venv/
+
+# Python-related files
+*.pyc
+*.pyo
+__pycache__/
+
+# Dependency and package management
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Logs
+logs/
+*.log
+gunicorn.log
+debug.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database and migrations
+*.sqlite3
+db.sqlite3
+migrations/
+alembic/
+
+# OS-specific and editor-specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+.idea/     # JetBrains IDEs
+.vscode/   # VS Code settings
+*.swp      # Swap files (e.g., Vim)
