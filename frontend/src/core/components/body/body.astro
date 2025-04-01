@@ -1,5 +1,6 @@
 ---
 import  './body.scss';
+import SearchForm from "../../../features/search/search-form.astro";
 ---
 
 <!DOCTYPE html>
@@ -11,11 +12,8 @@ import  './body.scss';
 </head>
 <body>
   <h1>Book Search</h1>
-  
-  <form>
-    <input type="text" id="searchInput" placeholder="Enter book title...">
-    <button type="submit">Search</button>
-  </form>
+  <SearchForm />
+
 
   <ul id="results"></ul>
 

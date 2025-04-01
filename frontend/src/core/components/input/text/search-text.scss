@@ -1,0 +1,23 @@
+.input-search {
+  position: relative;
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 3rem;
+    color: black;
+    font-size: 1.5rem;
+    align-content: center;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  &__input {
+    padding: 0.8rem;
+    padding-left: 3rem;
+    width: 100%;
+    max-width: 24.6rem;
+  }
+}

@@ -1,17 +1,22 @@
 $colors: (
-  $caribbean-current: (
-    main: #006d77ff,
-  ),
-  $tiffany-blue: (
+  primary: (
+    lighter: #c8e5e2,
     main: #83c5beff,
+    darker: #4ea69e,
+    // TODO: decide the color
+    // lighter: #ffffff,
+    // main: #edf6f9ff,
+    // darker: #c2e0eb,
   ),
-  $alice-blue: (
-    main: #edf6f9ff,
-  ),
-  $pale-dogwood: (
+  secondary: (
+    lighter: #fff0eb,
     main: #ffddd2ff,
+    darker: #ffc2ad,
   ),
-  $atomic-tangerine: (
-    main: #e29578ff,
+  background: (
+    lighter: #ffffff,
+    main: #edf6f9ff,
+    darker: #006d77ff,
+    accent: #e29578ff,
   ),
 );
