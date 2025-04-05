@@ -1,0 +1,9 @@
+---
+import "./section-container.scss";
+
+const {className} = Astro.props;
+---
+
+<section class={`section-container ${className}`}>
+    <slot />
+</section>

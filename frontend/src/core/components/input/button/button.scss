@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "../../../style/colors.scss" as *;
+@use "../../../style/responsive.scss" as *;
+
+.base-button {
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  color: map.get($colors, background, lighter);
+  cursor: pointer;
+  height: 100%;
+  font-weight: 600;
+  @include responsive-property(
+    font-size,
+    0.8rem,
+    0.8rem,
+    1rem,
+    1.125rem,
+    1.125rem
+  );
+
+  &--primary {
+    background-color: map.get($colors, primary, main);
+    &:active {
+      background-color: map.get($colors, primary, darker);
+    }
+  }
+
+  &--secondary {
+    background-color: map.get($colors, secondary, main);
+    color: map.get($colors, background, darker);
+
+    &:active {
+      background-color: map.get($colors, secondary, darker);
+    }
+  }
+}
