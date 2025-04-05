@@ -3,9 +3,11 @@
 @use "../../../style/responsive.scss" as *;
 
 .base-button {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
   color: map.get($colors, background, lighter);
   cursor: pointer;
+  height: 100%;
   font-weight: 600;
   @include responsive-property(
     font-size,

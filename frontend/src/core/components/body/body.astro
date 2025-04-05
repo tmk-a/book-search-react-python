@@ -1,6 +1,7 @@
 ---
 import  './body.scss';
-import SearchForm from "../../../features/search/search-form.astro";
+import SearchSection from "../../../features/search/search-section.astro";
+import AllScriptFromSearch from "../../../features/search/components/all-search-scripts.astro"
 ---
 
 <!DOCTYPE html>
@@ -9,15 +10,15 @@ import SearchForm from "../../../features/search/search-form.astro";
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Book Search</title>
+  <link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+		integrity="sha384-..." crossorigin="anonymous"
+		/>
+  <AllScriptFromSearch />
 </head>
 <body>
-  <h1>Book Search</h1>
-  <SearchForm />
-
-
+  <SearchSection />
   <ul id="results"></ul>
-
-  <script>
-  </script>
 </body>
 </html>

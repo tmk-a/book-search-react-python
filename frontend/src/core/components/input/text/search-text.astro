@@ -1,9 +1,9 @@
 ---
 import "./search-text.scss";
-const { className, placeholder="Search" } = Astro.props;
+const { type, className, placeholder, name } = Astro.props;
 ---
 
 <div class={`input-search ${className}`}>
     <i class="input-search__icon fa-solid fa-magnifying-glass"></i>
-    <input class="input-search__input" type="text" placeholder={placeholder} />
+    <input class="input-search__input" type={type} placeholder={placeholder} name={name} />
 </div>
