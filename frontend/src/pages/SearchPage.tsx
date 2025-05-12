@@ -1,7 +1,8 @@
 // src/pages/SearchPage.tsx
 
 // TODO: I should check this is need or not
-// import React, { useState } from "react";
+
+import "./SearchPage.css";
 import { useState } from "react";
 import { fetchBooks } from "../core/api";
 import BookCard from "../feature/BookCard";
@@ -41,9 +42,8 @@ const SearchPage = () => {
 
       {error && <div>{error}</div>}
 
-      <div>
+      <div className="search-result-container">
         {books.length > 0 ? (
-          // TODO: each book card should have unique key
           books.map((book: any) => <BookCard key={book.id} book={book} />)
         ) : (
           <p>No books found</p>
