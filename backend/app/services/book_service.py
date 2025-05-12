@@ -16,6 +16,7 @@ def fetch_books(query: str, max_results: int = 5):
     for item in data.get("items", []):
         volume_info = item.get("volumeInfo", {})
         book_details = {
+            "id": volume_info.get("id"),
             "title": volume_info.get("title"),
             "authors": volume_info.get("authors", []),
             "description": volume_info.get("description", "No description available"),
