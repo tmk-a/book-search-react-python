@@ -25,11 +25,11 @@ const BookCard = ({ book }: { book: book }) => {
         <img
           src={book.thumbnail}
           alt={book.title}
-          style={{ maxWidth: "100px" }}
+          style={{ maxWidth: "100%" }}
         />
       </div>
       <div className="bookCard-header">
-        <h3 className="bookCard__title">{book.title}</h3>
+        <h3>{book.title}</h3>
       </div>
       <div className="bookCard-body">
         <p>{outline}</p>
