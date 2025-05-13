@@ -1,6 +1,6 @@
 // import React from "react";
 
-import "./BookCard.css";
+import "./BookCard.scss";
 
 type book = {
   id: string;
@@ -15,7 +15,7 @@ type book = {
 const BookCard = ({ book }: { book: book }) => {
   let outline = book.description;
   if (outline.length > 100) {
-    outline = outline.substr(0, 200);
+    outline = outline.substr(0, 100);
     outline += "...";
   }
 
@@ -29,7 +29,7 @@ const BookCard = ({ book }: { book: book }) => {
         />
       </div>
       <div className="bookCard-header">
-        <h3>{book.title}</h3>
+        <h3 className="bookCard__title">{book.title}</h3>
       </div>
       <div className="bookCard-body">
         <p>{outline}</p>
