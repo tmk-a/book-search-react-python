@@ -1,4 +1,4 @@
-import "./SearchPage.css";
+import "./SearchPage.scss";
 import { useState } from "react";
 import { fetchBooks } from "../core/api";
 import BookCard from "../feature/BookCard";
