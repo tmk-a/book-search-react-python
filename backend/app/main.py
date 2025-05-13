@@ -4,16 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware #開発用
 
 app = FastAPI()
 
-# すべてのオリジンを許可（開発用）
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # すべてのオリジンを許可
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # すべてのHTTPメソッドを許可（GET, POST, PUT, DELETE）
-    allow_headers=["*"],  # すべてのヘッダーを許可
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Include the routes for books
 app.include_router(books.router)
 
 @app.get("/")
