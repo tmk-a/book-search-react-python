@@ -1,7 +1,3 @@
-// src/pages/SearchPage.tsx
-
-// TODO: I should check this is need or not
-
 import "./SearchPage.css";
 import { useState } from "react";
 import { fetchBooks } from "../core/api";
