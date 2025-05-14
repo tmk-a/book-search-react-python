@@ -25,6 +25,7 @@ const BookCard = ({ book }: { book: book }) => {
       <div
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
+        style={{ paddingTop: "1rem", paddingBottom: "1rem" }}
       >
         <div className="bookCard">
           <img
