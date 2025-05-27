@@ -1,8 +1,35 @@
+@use "../assets/styles/mixins" as mixins;
+
+.contants-container {
+  background-image: var(--bg-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.search-container {
+  @include mixins.glass-background(rgba(255, 255, 255, 0.15), 16px);
+  padding: 2rem;
+  margin: 2rem auto;
+  width: 80%;
+  max-width: 800px;
+  color: #111;
+}
+
 .search-result-container {
+  @include mixins.glass-background(rgba(255, 255, 255, 0.15), 16px);
   display: flex;
   gap: 1rem;
   width: 100%;
   max-width: 100vw;
   overflow-x: scroll;
   overflow-y: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .contants-container.contants-container {
+    background-image: var(--bg-url);
+  }
 }

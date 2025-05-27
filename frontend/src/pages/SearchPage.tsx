@@ -2,6 +2,7 @@ import "./SearchPage.scss";
 import { useState } from "react";
 import { fetchBooks } from "../core/api";
 import BookCard from "../feature/BookCard";
+import bgImage from "../assets/images/search-background.jpg";
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
@@ -24,17 +25,24 @@ const SearchPage = () => {
   };
 
   return (
-    <div>
-      <h1>Book Search</h1>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search for a book..."
-      />
-      <button onClick={handleSearch} disabled={loading}>
-        {loading ? "Searching..." : "Search"}
-      </button>
+    <div
+      className="contants-container"
+      style={{ "--bg-url": `url(${bgImage})` } as React.CSSProperties}
+    >
+      <div className="search-container">
+        <h1>What do you want to read?</h1>
+        <div>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search for a book..."
+          />
+          <button onClick={handleSearch} disabled={loading}>
+            {loading ? "Searching..." : "Search"}
+          </button>
+        </div>
+      </div>
 
       {error && <div>{error}</div>}
 
