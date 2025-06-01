@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from backend.app.models import TextRequest
 from backend.app.services.book_service import fetch_books
 from backend.app.services.vocabulary_service import analyze_vocabulary_level
@@ -6,11 +6,6 @@ import logging
 
 router = APIRouter()
 logging.basicConfig(level=logging.INFO)
-
-@router.get("/search")
-def search_books(q: str):
-    """Search books via Google Books API."""
-    return fetch_books(q)
 
 @router.post("/vocabulary-level")
 def get_vocabulary_level(request: TextRequest):
@@ -22,3 +17,14 @@ def get_vocabulary_level(request: TextRequest):
     except Exception as e:
         logging.error(f"Error processing request: {e}")
         return {"error": "Internal Server Error"}
+
+@router.get("/search")
+def search_books(
+    query: str = Query(..., min_length=1),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=40)
+):
+    result, status = fetch_books(query, page, page_size)
+    if status != 200:
+        return {"error": "Failed to fetch books", "status_code": status}
+    return result
