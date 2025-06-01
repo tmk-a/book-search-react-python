@@ -6,22 +6,32 @@ import bgImage from "../assets/images/search-background.jpg";
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
-  const [books, setBooks] = useState<any[]>([]);
+  const lastSearchRef = useRef<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const pageSize = 20;
 
-  const handleSearch = async () => {
-    if (!query) return;
+  const performSearch = async (searchQuery: string, pageNum = 1) => {
     setLoading(true);
     setError("");
     try {
-      const data = await fetchBooks(query);
+      const data = await fetchBooks(searchQuery, pageNum);
       setBooks(data.results || []);
+      setTotalItems(data.total_items || 0);
+      setPage(data.current_page);
     } catch (err) {
       setError("Error fetching books");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearch = () => {
+    if (!query) return;
+    lastSearchRef.current = query;
+    performSearch(query, 1);
   };
 
   return (
@@ -53,6 +63,13 @@ const SearchPage = () => {
           <p>No books found</p>
         )}
       </div>
+      <Pagination
+        currentPage={page}
+        totalPages={Math.ceil(totalItems / pageSize)}
+        onPageChange={(newPage) =>
+          performSearch(lastSearchRef.current, newPage)
+        }
+      />
     </div>
   );
 };
