@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from backend.app.routes import books
-from fastapi.middleware.cors import CORSMiddleware #開発用
+from fastapi.middleware.cors import CORSMiddleware #TODO: for development
 
 app = FastAPI()
 
@@ -13,7 +13,3 @@ app.add_middleware(
 )
 
 app.include_router(books.router)
-
-@app.get("/")
-def home():
-    return {"message": "Book Search API is running!"}

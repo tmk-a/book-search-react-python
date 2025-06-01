@@ -1,0 +1,12 @@
+@mixin glass-background(
+  $bg-color: rgba(255, 255, 255, 0.2),
+  $blur: 10px,
+  $border-color: rgba(255, 255, 255, 0.3)
+) {
+  background: $bg-color;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
