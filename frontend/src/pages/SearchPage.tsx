@@ -1,12 +1,23 @@
 import "./SearchPage.scss";
-import { useState } from "react";
-import { fetchBooks } from "../core/api";
+import { useState, useRef } from "react";
+import { fetchBooks } from "../service/api";
 import BookCard from "../feature/BookCard";
+import { Pagination } from "../components/Pagination";
 import bgImage from "../assets/images/search-background.jpg";
+
+type Book = {
+  id: string;
+  title: string;
+  description: string;
+  published_date: string;
+  thumbnail: string;
+  preview_link: string;
+};
 
 const SearchPage = () => {
   const [query, setQuery] = useState("");
   const lastSearchRef = useRef<string>("");
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
@@ -36,12 +47,12 @@ const SearchPage = () => {
 
   return (
     <div
-      className="contants-container"
+      className="contents-container"
       style={{ "--bg-url": `url(${bgImage})` } as React.CSSProperties}
     >
       <div className="search-container">
         <h1>What do you want to read?</h1>
-        <div>
+        <div className="search-container__input">
           <input
             type="text"
             value={query}
@@ -53,9 +64,8 @@ const SearchPage = () => {
           </button>
         </div>
       </div>
-
       {error && <div>{error}</div>}
-
+      <p>hit: {totalItems}</p>
       <div className="search-result-container">
         {books.length > 0 ? (
           books.map((book: any) => <BookCard key={book.id} book={book} />)
