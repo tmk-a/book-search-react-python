@@ -28,3 +28,10 @@ def search_books(
     if status != 200:
         return {"error": "Failed to fetch books", "status_code": status}
     return result
+
+@router.get("/books/{book_id}")
+def book_detail(book_id: str):
+    data, status = get_book_detail(book_id)
+    if status != 200:
+        return {"error": "Book not found", "status_code": status}
+    return data
