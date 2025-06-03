@@ -22,6 +22,8 @@ const SearchPage = () => {
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  const [isResultLimited, setIsResultLimited] = useState(false);
+
   const pageSize = 20;
 
   const performSearch = async (searchQuery: string, pageNum = 1) => {
@@ -32,6 +34,7 @@ const SearchPage = () => {
       setBooks(data.results || []);
       setTotalItems(data.total_items || 0);
       setPage(data.current_page);
+      setIsResultLimited((data.total_items || 0) > 1000);
     } catch (err) {
       setError("Error fetching books");
     } finally {
@@ -66,6 +69,11 @@ const SearchPage = () => {
       </div>
       {error && <div>{error}</div>}
       <p>hit: {totalItems}</p>
+      {isResultLimited && (
+        <p className="warning">
+          Note: Only the first 1000 results can be accessed due to API limits.
+        </p>
+      )}
       <div className="search-result-container">
         {books.length > 0 ? (
           books.map((book: any) => <BookCard key={book.id} book={book} />)
