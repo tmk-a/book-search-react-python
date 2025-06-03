@@ -2,8 +2,22 @@ import requests
 
 GOOGLE_BOOKS_API = "https://www.googleapis.com/books/v1/volumes"
 
-def fetch_books(query: str, page: int = 1, page_size: int = 20):
+def fetch_books(title=None, author=None, publisher=None, subject=None, keyword=None, page=1, page_size=20):
+    filters = []
     books = []
+    
+    if keyword:
+        filters.append(keyword)
+    if title:
+        filters.append(f"intitle:{title}")
+    if author:
+        filters.append(f"inauthor:{author}")
+    if publisher:
+        filters.append(f"inpublisher:{publisher}")
+    if subject:
+        filters.append(f"subject:{subject}")
+
+    query = "+".join(filters)
     start_index = (page - 1) * page_size
     params = {
         "q": query,
