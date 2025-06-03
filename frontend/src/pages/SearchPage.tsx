@@ -2,22 +2,26 @@ import "./SearchPage.scss";
 import { useState, useRef } from "react";
 import { fetchBooks } from "../service/api";
 import BookCard from "../feature/BookCard";
-import { Pagination } from "../components/Pagination";
+import { Pagination } from "../components/pagination/Pagination";
 import bgImage from "../assets/images/search-background.jpg";
-
-type Book = {
-  id: string;
-  title: string;
-  description: string;
-  published_date: string;
-  thumbnail: string;
-  preview_link: string;
-};
+import { BookHeader } from "../util/typeUtil";
+import { SearchInput } from "../components/input/SearchInput";
+import { SearchInputT } from "../util/typeUtil";
 
 const SearchPage = () => {
-  const [query, setQuery] = useState("");
-  const lastSearchRef = useRef<string>("");
-  const [books, setBooks] = useState<Book[]>([]);
+  const [keyword, setKeyword] = useState("");
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [publisher, setPublisher] = useState("");
+  const [subject, setSubject] = useState("");
+  const lastSearchRef = useRef<SearchInputT>({
+    title: "",
+    author: "",
+    publisher: "",
+    subject: "",
+    keyword: "",
+  });
+  const [books, setBooks] = useState<BookHeader[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [page, setPage] = useState(1);
@@ -25,12 +29,19 @@ const SearchPage = () => {
   const [isResultLimited, setIsResultLimited] = useState(false);
 
   const pageSize = 20;
+  const inputItems = [
+    { name: "title", value: title, fn: setTitle },
+    { name: "author", value: author, fn: setAuthor },
+    { name: "publisher", value: publisher, fn: setPublisher },
+    { name: "subject", value: subject, fn: setSubject },
+    { name: "keyword", value: keyword, fn: setKeyword },
+  ];
 
-  const performSearch = async (searchQuery: string, pageNum = 1) => {
+  const performSearch = async (params: SearchInputT, pageNum = 1) => {
     setLoading(true);
     setError("");
     try {
-      const data = await fetchBooks(searchQuery, pageNum);
+      const data = await fetchBooks(params, pageNum, pageSize);
       setBooks(data.results || []);
       setTotalItems(data.total_items || 0);
       setPage(data.current_page);
@@ -43,9 +54,16 @@ const SearchPage = () => {
   };
 
   const handleSearch = () => {
-    if (!query) return;
-    lastSearchRef.current = query;
-    performSearch(query, 1);
+    if (!keyword && !title && !author && !publisher && !subject) return;
+    lastSearchRef.current = {
+      title: title,
+      author: author,
+      publisher: publisher,
+      subject: subject,
+      keyword: keyword,
+    };
+    const params = { title, author, publisher, subject, keyword };
+    performSearch(params, 1);
   };
 
   return (
@@ -56,12 +74,16 @@ const SearchPage = () => {
       <div className="search-container">
         <h1>What do you want to read?</h1>
         <div className="search-container__input">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search for a book..."
-          />
+          {inputItems.map((input) => (
+            <>
+              <label>{input.name}</label>
+              <SearchInput
+                query={input.value}
+                onChange={(e) => input.fn(e.target.value)}
+                name={input.name}
+              />
+            </>
+          ))}
           <button onClick={handleSearch} disabled={loading}>
             {loading ? "Searching..." : "Search"}
           </button>
@@ -83,7 +105,7 @@ const SearchPage = () => {
       </div>
       <Pagination
         currentPage={page}
-        totalPages={Math.ceil(totalItems / pageSize)}
+        totalPages={isResultLimited ? 50 : Math.ceil(totalItems / pageSize)}
         onPageChange={(newPage) =>
           performSearch(lastSearchRef.current, newPage)
         }
