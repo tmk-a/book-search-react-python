@@ -1,0 +1,67 @@
+.book-detail {
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+  font-family: "Inter", sans-serif;
+
+  &__back {
+    background: none;
+    border: none;
+    color: #6c8e7d;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &__image {
+    flex: 0 0 200px;
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    object-fit: cover;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #2d2d2d;
+  }
+
+  &__author {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+
+  &__meta {
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 1rem;
+
+    span {
+      margin-right: 1rem;
+    }
+  }
+
+  &__desc {
+    line-height: 1.6;
+    color: #444;
+    white-space: pre-line;
+  }
+}
