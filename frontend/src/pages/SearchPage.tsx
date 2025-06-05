@@ -1,7 +1,8 @@
 import "./SearchPage.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { fetchBooks } from "../service/api";
-import BookCard from "../feature/BookCard";
+import BookCard from "../feature/bookCard/BookCard";
 import { Pagination } from "../components/pagination/Pagination";
 import bgImage from "../assets/images/search-background.jpg";
 import { BookHeader } from "../util/typeUtil";
@@ -9,11 +10,17 @@ import { SearchInput } from "../components/input/SearchInput";
 import { SearchInputT } from "../util/typeUtil";
 
 const SearchPage = () => {
-  const [keyword, setKeyword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [publisher, setPublisher] = useState("");
-  const [subject, setSubject] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [title, setTitle] = useState(searchParams.get("title") || "");
+  const [author, setAuthor] = useState(searchParams.get("author") || "");
+  const [publisher, setPublisher] = useState(
+    searchParams.get("publisher") || ""
+  );
+  const [subject, setSubject] = useState(searchParams.get("subject") || "");
+  const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
+  const queryString = searchParams.toString();
+
   const lastSearchRef = useRef<SearchInputT>({
     title: "",
     author: "",
@@ -55,16 +62,37 @@ const SearchPage = () => {
 
   const handleSearch = () => {
     if (!keyword && !title && !author && !publisher && !subject) return;
-    lastSearchRef.current = {
-      title: title,
-      author: author,
-      publisher: publisher,
-      subject: subject,
-      keyword: keyword,
-    };
+
     const params = { title, author, publisher, subject, keyword };
+
+    setSearchParams(
+      Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ""))
+    );
+
+    lastSearchRef.current = params;
     performSearch(params, 1);
   };
+
+  useEffect(() => {
+    const params: SearchInputT = {
+      title: searchParams.get("title") || "",
+      author: searchParams.get("author") || "",
+      publisher: searchParams.get("publisher") || "",
+      subject: searchParams.get("subject") || "",
+      keyword: searchParams.get("keyword") || "",
+    };
+
+    const hasParams = Object.values(params).some((v) => v !== "");
+
+    if (hasParams) {
+      setTitle(params.title);
+      setAuthor(params.author);
+      setPublisher(params.publisher);
+      setSubject(params.subject);
+      setKeyword(params.keyword);
+      performSearch(params, 1);
+    }
+  }, []);
 
   return (
     <div
@@ -98,7 +126,12 @@ const SearchPage = () => {
       )}
       <div className="search-result-container">
         {books.length > 0 ? (
-          books.map((book: any) => <BookCard key={book.id} book={book} />)
+          books.map((book: BookHeader) => (
+            <BookCard
+              book={book}
+              queryString={queryString ? `?${queryString}` : ""}
+            />
+          ))
         ) : (
           <p>No books found</p>
         )}
