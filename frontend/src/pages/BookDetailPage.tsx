@@ -1,20 +1,21 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BookVolume } from "../util/typeUtil";
-import { BookDescription } from "../components/bookDescription/BookDescription";
+import { fetchBookDetail } from "../service/api";
+import BookDetail from "../feature/bookDetail/BookDetail";
 
 const BookDetailPage = () => {
-  const { id } = useParams();
+  const { id } = useParams<string>();
   const [book, setBook] = useState<BookVolume>();
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryString = location.search;
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await fetch(
-          `https://www.googleapis.com/books/v1/volumes/${id}`
-        );
-        const data = await res.json();
+        const data = await fetchBookDetail(id ?? "");
         setBook(data);
       } catch (err) {
         setError("Failed to load book data.");
@@ -30,16 +31,16 @@ const BookDetailPage = () => {
   const info = book.volumeInfo;
 
   return (
-    <div className="book-detail">
-      <h1>{info.title}</h1>
-      <p>Authors: {info.authors?.join(", ")}</p>
-      <p>Published: {info.publishedDate}</p>
-      <img src={info.imageLinks?.thumbnail} alt={info.title} />
-      <BookDescription html={info.description || "No description available."} />
-      <a href={info.previewLink} target="_blank" rel="noopener noreferrer">
-        Preview
-      </a>
-    </div>
+    <BookDetail
+      title={info.title}
+      author={info.authors?.join(", ")}
+      image={info.imageLinks?.thumbnail ?? ""}
+      description={info.description}
+      publisher={info.publisher}
+      publishedDate={info.publishedDate}
+      pageCount={info.pageCount}
+      onBack={() => navigate(`/${queryString}`)}
+    />
   );
 };
 
