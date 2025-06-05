@@ -15,3 +15,12 @@ export const fetchBooks = async (
   const data = await res.json();
   return data;
 };
+
+export const fetchBookDetail = async (bookId: string) => {
+  const res = await fetch(`${API_BASE_URL}/books/${bookId}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch book detail data");
+  }
+  const data = await res.json();
+  return data;
+};
