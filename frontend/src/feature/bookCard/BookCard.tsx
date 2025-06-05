@@ -1,29 +1,31 @@
 import "./BookCard.scss";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { BookHeader } from "../../util/typeUtil";
+import React from "react";
 
-type book = {
-  id: string;
-  title: string;
-  authors: string;
-  description: string;
-  published_date: string;
-  thumbnail: string;
-  preview_link: string;
-};
+interface BookCardProps {
+  book: BookHeader;
+  queryString?: string;
+}
 
-const BookCard = ({ book }: { book: book }) => {
+const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
   let outline = book.description;
   if (outline.length > 100) {
     outline = outline.substr(0, 100);
     outline += "...";
   }
 
+  const linkTo = {
+    pathname: `/book/${book.id}`,
+    search: queryString,
+  };
+
   const [isHovering, setIsHovering] = useState(false);
 
   return (
     <>
-      <Link to={`/book/${book.id}`}>
+      <Link to={linkTo}>
         <div
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
