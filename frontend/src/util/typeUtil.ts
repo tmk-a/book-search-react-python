@@ -11,21 +11,22 @@ export type SearchInputT = {
 export type BookHeader = {
   id: string;
   title: string;
+  authors: string;
   description: string;
   published_date: string;
   thumbnail: string;
   preview_link: string;
 };
 
-export type BookDetail = {
+export type BookDetailT = {
   title: string;
   subtitle: string;
   authors: string[];
   publisher: string;
-  publishedDate: string; // e.g. "2022-03-01"
-  description: string; // HTML-formatted string
+  publishedDate: string;
+  description: string;
   industryIdentifiers: {
-    type: string; // e.g. "ISBN_10" | "ISBN_13"
+    type: string;
     identifier: string;
   }[];
   readingModes: {
@@ -34,9 +35,9 @@ export type BookDetail = {
   };
   pageCount: number;
   printedPageCount: number;
-  printType: string; // e.g. "BOOK"
+  printType: string;
   categories: string[];
-  maturityRating: string; // e.g. "NOT_MATURE"
+  maturityRating: string;
   allowAnonLogging: boolean;
   contentVersion: string;
   panelizationSummary: {
@@ -51,18 +52,18 @@ export type BookDetail = {
     large?: string;
     extraLarge?: string;
   };
-  language: string; // e.g. "en"
+  language: string;
   previewLink: string;
   infoLink: string;
   canonicalVolumeLink: string;
 };
 
 export type BookVolume = {
-  kind: string; // e.g. "books#volume"
+  kind: string;
   id: string;
   etag: string;
   selfLink: string;
-  volumeInfo: BookDetail;
+  volumeInfo: BookDetailT;
   layerInfo?: {
     layers: {
       layerId: string;
