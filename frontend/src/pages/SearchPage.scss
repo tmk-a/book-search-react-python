@@ -1,44 +1,60 @@
-@use "../assets/styles/mixins" as mixins;
+@use "../core//style//variables" as *;
 
 .contents-container {
-  background-image: var(--bg-url);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  width: 100%;
-  padding: 2rem;
+  background-color: $bg-color;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  padding: $padding;
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: $text-color;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 }
 
-.search-container {
-  @include mixins.glass-background(rgba(255, 255, 255, 0.15), 16px);
-  padding: 2rem;
-  color: #111;
+.search-container__input {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  max-width: $max-width;
+  margin: 0 auto $padding auto;
 
-  &__input {
-    display: flex;
-    gap: 1rem;
+  label {
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+
+  input {
+    border: 1px solid $border-color;
+    padding: 0.5rem;
+    border-radius: $radius;
+    font-family: var(--font-sans);
+    background-color: #fff;
+    color: $text-color;
+  }
+
+  button {
+    background-color: $accent-sage;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: $radius;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($accent-sage, 10%);
+    }
   }
 }
 
 .search-result-container {
-  @include mixins.glass-background(rgba(255, 255, 255, 0.15), 16px);
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2rem;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  padding: 1rem;
-}
-
-.warning {
-  color: #e53935;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  .contents-container.contents-container {
-    background-image: var(--bg-url);
-  }
+  max-width: $max-width;
+  margin: 0 auto;
 }
