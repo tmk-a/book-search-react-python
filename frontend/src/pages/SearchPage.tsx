@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { fetchBooks } from "../service/api";
 import BookCard from "../feature/bookCard/BookCard";
 import { Pagination } from "../core/components/pagination/Pagination";
-import bgImage from "../assets/images/search-background.jpg";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchInputT } from "../util/typeUtil";
@@ -95,54 +94,53 @@ const SearchPage = () => {
   }, []);
 
   return (
-    <div
-      className="contents-container"
-      style={{ "--bg-url": `url(${bgImage})` } as React.CSSProperties}
-    >
+    <div className="contents-container">
       <div className="search-container">
         <h1>What do you want to read?</h1>
         <div className="search-container__input">
           {inputItems.map((input) => (
-            <>
+            <div className="search-container__input-item">
               <label>{input.name}</label>
               <SearchInput
                 query={input.value}
                 onChange={(e) => input.fn(e.target.value)}
                 name={input.name}
               />
-            </>
+            </div>
           ))}
           <button onClick={handleSearch} disabled={loading}>
             {loading ? "Searching..." : "Search"}
           </button>
         </div>
       </div>
-      {error && <div>{error}</div>}
-      <p>hit: {totalItems}</p>
-      {isResultLimited && (
-        <p className="warning">
-          Note: Only the first 1000 results can be accessed due to API limits.
-        </p>
-      )}
-      <div className="search-result-container">
-        {books.length > 0 ? (
-          books.map((book: BookHeader) => (
-            <BookCard
-              book={book}
-              queryString={queryString ? `?${queryString}` : ""}
-            />
-          ))
-        ) : (
-          <p>No books found</p>
+      <div className="search-result__container">
+        {error && <div>{error}</div>}
+        <p className="search-result__count">hit: {totalItems}</p>
+        {isResultLimited && (
+          <p>
+            Note: Only the first 1000 results can be accessed due to API limits.
+          </p>
         )}
+        <div className="search-result__books-container">
+          {books.length > 0 ? (
+            books.map((book: BookHeader) => (
+              <BookCard
+                book={book}
+                queryString={queryString ? `?${queryString}` : ""}
+              />
+            ))
+          ) : (
+            <p>No books found</p>
+          )}
+        </div>
+        <Pagination
+          currentPage={page}
+          totalPages={isResultLimited ? 50 : Math.ceil(totalItems / pageSize)}
+          onPageChange={(newPage) =>
+            performSearch(lastSearchRef.current, newPage)
+          }
+        />
       </div>
-      <Pagination
-        currentPage={page}
-        totalPages={isResultLimited ? 50 : Math.ceil(totalItems / pageSize)}
-        onPageChange={(newPage) =>
-          performSearch(lastSearchRef.current, newPage)
-        }
-      />
     </div>
   );
 };
