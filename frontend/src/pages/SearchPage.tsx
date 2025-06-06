@@ -3,10 +3,10 @@ import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchBooks } from "../service/api";
 import BookCard from "../feature/bookCard/BookCard";
-import { Pagination } from "../components/pagination/Pagination";
+import { Pagination } from "../core/components/pagination/Pagination";
 import bgImage from "../assets/images/search-background.jpg";
 import { BookHeader } from "../util/typeUtil";
-import { SearchInput } from "../components/input/SearchInput";
+import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchInputT } from "../util/typeUtil";
 
 const SearchPage = () => {
