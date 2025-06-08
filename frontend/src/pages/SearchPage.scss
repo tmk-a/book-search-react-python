@@ -1,7 +1,11 @@
-@use "../core//style//variables" as *;
+@use "../core/style/variables" as *;
+@use "../core/style/responsive" as *;
 @use "sass:color";
 
 .contents-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-color: $bg-color;
   min-height: 100vh;
   font-family: var(--font-sans);
@@ -17,25 +21,25 @@
 }
 
 .search-container {
+  max-width: $max-width;
+
   &__input {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 60rem;
     padding-bottom: 1.5rem;
+  }
 
-    button {
-      background-color: $accent-sage;
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1rem;
-      border-radius: $radius;
-      font-weight: 600;
-      cursor: pointer;
+  &__input-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 
-      &:hover {
-        background-color: color.scale($accent-sage, $lightness: -20%);
-      }
+    @include responsive($screen-md) {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
   }
 
@@ -55,6 +59,33 @@
       font-family: var(--font-sans);
       background-color: #fff;
       color: $text-color;
+      width: 100%;
+    }
+  }
+
+  &__input-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    button {
+      background-color: $accent-sage;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: $radius;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+
+      @include responsive($screen-md) {
+        width: 10rem;
+        align-self: end;
+      }
+
+      &:hover {
+        background-color: color.scale($accent-sage, $lightness: -20%);
+      }
     }
   }
 }
@@ -64,6 +95,8 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    width: 100%;
+    max-width: 60rem;
 
     p {
       color: $text-color;
@@ -71,9 +104,18 @@
   }
 
   &__books-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: 2rem;
-    max-width: $max-width;
+    // max-width: $max-width;
+    margin: 0 auto;
+
+    @include responsive-property(
+      grid-template-columns,
+      repeat(1, minmax(0, 1fr)),
+      repeat(2, minmax(0, 1fr)),
+      repeat(3, minmax(0, 1fr)),
+      repeat(4, minmax(0, 1fr)),
+      repeat(5, minmax(0, 1fr))
+    );
   }
 }

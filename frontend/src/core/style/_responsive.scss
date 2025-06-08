@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "./variables" as *;
+
+@mixin responsive-property(
+  $property,
+  $xsValue,
+  $smValue,
+  $mdValue,
+  $lgValue,
+  $xlValue
+) {
+  & {
+    #{$property}: $xsValue;
+  }
+  @include responsive($screen-xs) {
+    #{$property}: $xsValue;
+  }
+  @include responsive($screen-sm) {
+    #{$property}: $smValue;
+  }
+  @include responsive($screen-md) {
+    #{$property}: $mdValue;
+  }
+  @include responsive($screen-lg) {
+    #{$property}: $lgValue;
+  }
+  @include responsive($screen-xl) {
+    #{$property}: $xlValue;
+  }
+}
+
+@mixin responsive($size) {
+  @media (min-width: $size) {
+    @content;
+  }
+}
