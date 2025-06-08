@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 from backend.app.models import TextRequest
 from backend.app.services.book_service import fetch_books
 from backend.app.services.vocabulary_service import analyze_vocabulary_level
@@ -29,9 +29,16 @@ def search_books(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=40)
 ):
-    result, status = fetch_books(title, author, publisher, subject, keyword, page, page_size)
+    result,status = fetch_books(title, author, publisher, subject, keyword, page, page_size)
+
+    print(f"result: {result}")
+
     if status != 200:
-        return {"error": "Failed to fetch books", "status_code": status}
+        raise HTTPException(status_code=status, detail=result.get("error", "Unknown error"))
+
+    if not result.get("items"):
+        return {"items": [], "message": "No results found"}, 200
+
     return result
 
 @router.get("/books/{book_id}")

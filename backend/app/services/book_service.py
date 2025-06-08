@@ -26,16 +26,18 @@ def fetch_books(title=None, author=None, publisher=None, subject=None, keyword=N
     }
 
     response = requests.get(GOOGLE_BOOKS_API, params=params)
+
     if response.status_code != 200:
-        return None, response.status_code
+        return {"error": "Failed to fetch from Google Books API"}, response.status_code
 
     data = response.json()
+
+    if "items" not in data:
+        data["items"] = []
+
     items = data.get("items", [])
     total_items = data.get("totalItems", 0)
 
-    if not items:
-        return
-    
     for item in items:
         volume_info = item.get("volumeInfo", {})
         book_details = {
