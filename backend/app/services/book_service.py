@@ -52,7 +52,7 @@ def fetch_books(title=None, author=None, publisher=None, subject=None, keyword=N
         books.append(book_details)
 
     return {
-        "results": books,
+        "items": books,
         "total_items": total_items,
         "current_page": page,
         "page_size": page_size

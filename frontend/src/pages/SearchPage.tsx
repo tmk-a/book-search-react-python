@@ -48,7 +48,7 @@ const SearchPage = () => {
     setError("");
     try {
       const data = await fetchBooks(params, pageNum, pageSize);
-      setBooks(data.results || []);
+      setBooks(data.items || []);
       setTotalItems(data.total_items || 0);
       setPage(data.current_page);
       setIsResultLimited((data.total_items || 0) > 1000);
