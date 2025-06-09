@@ -40,7 +40,6 @@ const SearchPage = () => {
     { name: "author", value: author, fn: setAuthor },
     { name: "publisher", value: publisher, fn: setPublisher },
     { name: "subject", value: subject, fn: setSubject },
-    { name: "keyword", value: keyword, fn: setKeyword },
   ];
 
   const performSearch = async (params: SearchInputT, pageNum = 1) => {
@@ -98,24 +97,36 @@ const SearchPage = () => {
       <div className="search-container">
         <h1>What do you want to read?</h1>
         <div className="search-container__input">
-          {inputItems.map((input) => (
-            <div className="search-container__input-item">
-              <label>{input.name}</label>
-              <SearchInput
-                query={input.value}
-                onChange={(e) => input.fn(e.target.value)}
-                name={input.name}
-              />
-            </div>
-          ))}
-          <button onClick={handleSearch} disabled={loading}>
-            {loading ? "Searching..." : "Search"}
-          </button>
+          <div className="search-container__input-item">
+            <label>keyword</label>
+            <SearchInput
+              query={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              name={"keyword"}
+            />
+          </div>
+          <div className="search-container__input-items">
+            {inputItems.map((input) => (
+              <div className="search-container__input-item">
+                <label>{input.name}</label>
+                <SearchInput
+                  query={input.value}
+                  onChange={(e) => input.fn(e.target.value)}
+                  name={input.name}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="search-container__input-bottom">
+            <button onClick={handleSearch} disabled={loading}>
+              {loading ? "Searching..." : "Search"}
+            </button>
+            <p className="search-result__count">hit: {totalItems}</p>
+          </div>
         </div>
       </div>
       <div className="search-result__container">
         {error && <div>{error}</div>}
-        <p className="search-result__count">hit: {totalItems}</p>
         {isResultLimited && (
           <p>
             Note: Only the first 1000 results can be accessed due to API limits.

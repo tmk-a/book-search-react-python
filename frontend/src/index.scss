@@ -4,6 +4,7 @@
   --font-sans: "Inter", sans-serif;
   --font-serif: "Playfair Display", serif;
   --font-mono: "IBM Plex Mono", monospace;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
   font-size: 16px;
@@ -28,18 +29,16 @@
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body {
   margin: 0;
+  padding: 0;
   width: 100vw;
   height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
