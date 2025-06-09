@@ -31,8 +31,6 @@ def search_books(
 ):
     result,status = fetch_books(title, author, publisher, subject, keyword, page, page_size)
 
-    print(f"result: {result}")
-
     if status != 200:
         raise HTTPException(status_code=status, detail=result.get("error", "Unknown error"))
 
