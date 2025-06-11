@@ -121,11 +121,11 @@ const SearchPage = () => {
             <button onClick={handleSearch} disabled={loading}>
               {loading ? "Searching..." : "Search"}
             </button>
-            <p className="search-result__count">hit: {totalItems}</p>
           </div>
         </div>
       </div>
       <div className="search-result__container">
+        <p className="search-result__count">{totalItems} results</p>
         {error && <div>{error}</div>}
         {isResultLimited && (
           <p>
