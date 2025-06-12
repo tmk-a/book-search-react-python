@@ -50,6 +50,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
               )}
             </div>
             <div
+              className={`${BASE_CLASS}__info`}
               style={{
                 opacity: isHovering ? "1" : "0",
               }}
@@ -60,7 +61,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
               </p>
               <p className={`${BASE_CLASS}__desc`}>
                 {book.description
-                  ? book.description.slice(0, 60) + "..."
+                  ? book.description.slice(0, 100) + "..."
                   : "No description available"}
               </p>
             </div>
