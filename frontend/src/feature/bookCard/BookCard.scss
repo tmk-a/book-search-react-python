@@ -1,73 +1,60 @@
-.bookCard {
-  width: 180px;
-  height: 264px;
-  border-radius: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  position: relative;
+@use "../../core//style//variables" as *;
+
+.book-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  &__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
 
   &__image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  &__title-overlay {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+    color: #4a4a4a;
+    font-family: "Playfair Display", serif;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    max-width: 90%;
+    line-height: 1.4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  &__info {
-    position: absolute;
-    background-color: "white";
+  &__title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-color;
+    margin-top: 0.5rem;
   }
 
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0px 2px 1rem rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s, transform 0.3s;
-    transform: scale(1.05);
+  &__author {
+    font-size: 0.85rem;
+    color: $text-muted;
   }
-}
 
-// .bookCard:hover .bookCard-header h3 {
-//   font-style: italic;
-// }
-
-.bookCard-img img {
-  width: 100%;
-  // height: 120px;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-}
-
-.bookCard-header h3 {
-  padding: 0 0.25rem;
-  // font-size: 1rem;
-  font-weight: bold;
-  margin-top: 0px;
-}
-
-.bookCard-body p {
-  padding: 0 4px;
-  font-size: 0.8rem;
-  margin-top: -0.5rem;
-}
-
-.bookCard-footer {
-  padding: 0.5rem 1rem 1rem 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.bookCard-footer-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 0.8rem;
-}
-
-// .bookCard-footer .avatar {
-//   width: 34px;
-//   height: 34px;
-//   border-radius: 50%;
-// }
-
-.bookCard .muted {
-  color: rgba(0, 0, 0, 0.7);
+  &__desc {
+    font-size: 0.75rem;
+    color: $text-muted;
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
 }

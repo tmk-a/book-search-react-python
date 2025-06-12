@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { BookHeader } from "../../util/typeUtil";
 import React from "react";
+import noCoverImg from "../../assets/images/no-image.png";
 
 interface BookCardProps {
   book: BookHeader;
@@ -10,18 +11,14 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
-  let outline = book.description;
-  if (outline.length > 100) {
-    outline = outline.substr(0, 100);
-    outline += "...";
-  }
-
   const linkTo = {
     pathname: `/book/${book.id}`,
     search: queryString,
   };
 
   const [isHovering, setIsHovering] = useState(false);
+
+  const BASE_CLASS = "book-card";
 
   return (
     <>
@@ -31,31 +28,41 @@ const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
           onMouseLeave={() => setIsHovering(false)}
           style={{ paddingTop: "1rem", paddingBottom: "1rem" }}
         >
-          <div className="bookCard">
-            <img
-              src={book.thumbnail ?? null}
-              alt={book.title}
-              className="bookCard__image"
-              style={{ opacity: isHovering ? "0" : "1" }}
-            />
+          <div className={`${BASE_CLASS}`}>
+            <div className={`${BASE_CLASS}__image-wrapper`}>
+              {book.thumbnail ? (
+                <img
+                  src={book.thumbnail}
+                  alt={book.title}
+                  className={`${BASE_CLASS}__image`}
+                />
+              ) : (
+                <>
+                  <img
+                    src={noCoverImg}
+                    alt="No cover"
+                    className={`${BASE_CLASS}__image`}
+                  />
+                  <div className={`${BASE_CLASS}__title-overlay`}>
+                    {book.title}
+                  </div>
+                </>
+              )}
+            </div>
             <div
-              className="bookCard bookCard__info"
               style={{
                 opacity: isHovering ? "1" : "0",
               }}
             >
-              <div className="bookCard-header">
-                <h3>{book.title}</h3>
-              </div>
-              <div className="bookCard-body">
-                <p>{outline}</p>
-              </div>
-              <div className="bookCard-footer">
-                <div className="bookCard-footer-item">
-                  <strong>{book.authors}</strong>
-                  <span className="muted">{book.published_date}</span>
-                </div>
-              </div>
+              <h3 className={`${BASE_CLASS}__title`}>{book.title}</h3>
+              <p className={`${BASE_CLASS}__author`}>
+                {book.authors?.join(", ") || "Unknown author"}
+              </p>
+              <p className={`${BASE_CLASS}__desc`}>
+                {book.description
+                  ? book.description.slice(0, 60) + "..."
+                  : "No description available"}
+              </p>
             </div>
           </div>
         </div>
