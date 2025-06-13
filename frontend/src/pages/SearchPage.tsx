@@ -32,7 +32,7 @@ const SearchPage = () => {
   const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [isResultLimited, setIsResultLimited] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const pageSize = 20;
@@ -85,9 +85,12 @@ const SearchPage = () => {
       keyword: searchParams.get("keyword") || "",
     };
 
-    const hasParams = Object.values(params).some((v) => v !== "");
+    const allFieldsAreEmpty = Object.values(lastSearchRef.current).every(
+      (v) => v === ""
+    );
+    if (allFieldsAreEmpty) return;
 
-    if (hasParams) {
+    if (!allFieldsAreEmpty) {
       setTitle(params.title);
       setAuthor(params.author);
       setPublisher(params.publisher);
@@ -116,6 +119,11 @@ const SearchPage = () => {
 
   useEffect(() => {
     if (page === 1) return;
+
+    const allFieldsAreEmpty = Object.values(lastSearchRef.current).every(
+      (v) => v === ""
+    );
+    if (allFieldsAreEmpty) return;
 
     performSearch(lastSearchRef.current, page);
   }, [page]);
