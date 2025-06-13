@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchBooks } from "../service/api";
 import BookCard from "../feature/bookCard/BookCard";
-import { Pagination } from "../core/components/pagination/Pagination";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchInputT } from "../util/typeUtil";
@@ -30,10 +29,12 @@ const SearchPage = () => {
   const [books, setBooks] = useState<BookHeader[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const [isResultLimited, setIsResultLimited] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
+  const observer = useRef<IntersectionObserver | null>(null);
   const pageSize = 20;
   const inputItems = [
     { name: "title", value: title, fn: setTitle },
@@ -47,17 +48,21 @@ const SearchPage = () => {
     setError("");
     try {
       const data = await fetchBooks(params, pageNum, pageSize);
-      setBooks(data.items || []);
+      if (pageNum === 1) {
+        setBooks(data.items || []);
+      } else {
+        setBooks((prev) => [...prev, ...(data.items || [])]);
+      }
       setTotalItems(data.total_items || 0);
-      setPage(data.current_page);
+      // setPage(data.current_page);
       setIsResultLimited((data.total_items || 0) > 1000);
+      setHasMore((data.items || []).length === pageSize);
     } catch (err) {
       setError("Error fetching books");
     } finally {
       setLoading(false);
     }
   };
-
   const handleSearch = () => {
     if (!keyword && !title && !author && !publisher && !subject) return;
 
@@ -91,6 +96,29 @@ const SearchPage = () => {
       performSearch(params, 1);
     }
   }, []);
+
+  useEffect(() => {
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !loading && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    });
+
+    const target = document.querySelector("#sentinel");
+    if (target) observer.current.observe(target);
+
+    return () => {
+      if (observer.current) observer.current.disconnect();
+    };
+  }, [loading, hasMore]);
+
+  useEffect(() => {
+    if (page === 1) return;
+
+    performSearch(lastSearchRef.current, page);
+  }, [page]);
 
   return (
     <div className="contents-container">
@@ -143,14 +171,8 @@ const SearchPage = () => {
           ) : (
             <p>No books found</p>
           )}
+          <div id="sentinel" style={{ height: "1px" }} />
         </div>
-        <Pagination
-          currentPage={page}
-          totalPages={isResultLimited ? 50 : Math.ceil(totalItems / pageSize)}
-          onPageChange={(newPage) =>
-            performSearch(lastSearchRef.current, newPage)
-          }
-        />
       </div>
     </div>
   );
