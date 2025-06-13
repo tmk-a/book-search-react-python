@@ -10,6 +10,7 @@
   min-height: 100vh;
   font-family: var(--font-sans);
   padding: $padding;
+  gap: 5rem;
 
   h1 {
     font-family: var(--font-serif);
@@ -106,8 +107,6 @@
   &__books-container {
     display: grid;
     gap: 2rem;
-    // max-width: $max-width;
-    margin: 0 auto;
 
     @include responsive-property(
       grid-template-columns,
