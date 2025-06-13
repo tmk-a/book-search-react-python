@@ -59,11 +59,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, queryString }) => {
               <p className={`${BASE_CLASS}__author`}>
                 {book.authors?.join(", ") || "Unknown author"}
               </p>
-              <p className={`${BASE_CLASS}__desc`}>
-                {book.description
-                  ? book.description.slice(0, 100) + "..."
-                  : "No description available"}
-              </p>
+              <p className={`${BASE_CLASS}__desc`}>{book.description}</p>
             </div>
           </div>
         </div>
