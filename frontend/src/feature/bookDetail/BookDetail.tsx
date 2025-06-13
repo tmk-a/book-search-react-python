@@ -21,26 +21,30 @@ const BookDetail: React.FC<BookDetailProps> = ({
   pageCount,
   onBack,
 }) => {
+  const BASE_CLASS = "book-detail";
+
   return (
-    <div className="book-detail">
-      <button className="book-detail__back" onClick={onBack}>
+    <div className={`${BASE_CLASS}`}>
+      <button className={`${BASE_CLASS}__back`} onClick={onBack}>
         ← Back
       </button>
-      <div className="book-detail__container">
+      <div className={`${BASE_CLASS}__container`}>
         <img
           src={image}
           alt={`Cover of ${title}`}
-          className="book-detail__image"
+          className={`${BASE_CLASS}__image`}
         />
-        <div className="book-detail__info">
-          <h1 className="book-detail__title">{title}</h1>
-          <p className="book-detail__author">by {author}</p>
-          <p className="book-detail__meta">
+        <div className={`${BASE_CLASS}__info`}>
+          <h1 className={`${BASE_CLASS}__title`}>{title}</h1>
+          <p className={`${BASE_CLASS}__author`}>by {author}</p>
+          <p className={`${BASE_CLASS}__meta`}>
             {publisher && <span>{publisher}</span>}
             {publishedDate && <span>・{publishedDate}</span>}
             {pageCount && <span>・{pageCount} pages</span>}
           </p>
-          {description && <p className="book-detail__desc">{description}</p>}
+          {description && (
+            <p className={`${BASE_CLASS}__desc`}>{description}</p>
+          )}
         </div>
       </div>
     </div>
