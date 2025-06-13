@@ -85,12 +85,9 @@ const SearchPage = () => {
       keyword: searchParams.get("keyword") || "",
     };
 
-    const allFieldsAreEmpty = Object.values(lastSearchRef.current).every(
-      (v) => v === ""
-    );
-    if (allFieldsAreEmpty) return;
+    const hasParams = Object.values(params).some((v) => v !== "");
 
-    if (!allFieldsAreEmpty) {
+    if (hasParams) {
       setTitle(params.title);
       setAuthor(params.author);
       setPublisher(params.publisher);
