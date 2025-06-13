@@ -37,10 +37,10 @@ const SearchPage = () => {
   const observer = useRef<IntersectionObserver | null>(null);
   const pageSize = 20;
   const inputItems = [
-    { name: "title", value: title, fn: setTitle },
-    { name: "author", value: author, fn: setAuthor },
-    { name: "publisher", value: publisher, fn: setPublisher },
-    { name: "subject", value: subject, fn: setSubject },
+    { id: 1, name: "title", value: title, fn: setTitle },
+    { id: 2, name: "author", value: author, fn: setAuthor },
+    { id: 3, name: "publisher", value: publisher, fn: setPublisher },
+    { id: 4, name: "subject", value: subject, fn: setSubject },
   ];
 
   const performSearch = async (params: SearchInputT, pageNum = 1) => {
@@ -54,7 +54,6 @@ const SearchPage = () => {
         setBooks((prev) => [...prev, ...(data.items || [])]);
       }
       setTotalItems(data.total_items || 0);
-      // setPage(data.current_page);
       setIsResultLimited((data.total_items || 0) > 1000);
       setHasMore((data.items || []).length === pageSize);
     } catch (err) {
@@ -140,7 +139,7 @@ const SearchPage = () => {
           </div>
           <div className="search-container__input-items">
             {inputItems.map((input) => (
-              <div className="search-container__input-item">
+              <div key={input.id} className="search-container__input-item">
                 <label>{input.name}</label>
                 <SearchInput
                   query={input.value}
@@ -169,6 +168,7 @@ const SearchPage = () => {
           {books.length > 0 ? (
             books.map((book: BookHeader) => (
               <BookCard
+                key={book.id}
                 book={book}
                 queryString={queryString ? `?${queryString}` : ""}
               />
