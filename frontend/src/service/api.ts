@@ -1,8 +1,8 @@
-import { SearchInputT } from "../util/typeUtil";
+import { SearchFormValues } from "../util/typeUtil";
 const API_BASE_URL = "https://book-search-react-python.onrender.com";
 
 export const fetchBooks = async (
-  { title, author, publisher, subject, keyword }: SearchInputT,
+  { title, author, publisher, subject, keyword }: SearchFormValues,
   pageNum = 1,
   pageSize = 20
 ) => {
