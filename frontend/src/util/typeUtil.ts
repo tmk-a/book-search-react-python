@@ -1,6 +1,6 @@
 // typeUtil.ts
 
-export type SearchInputT = {
+export type SearchFormValues = {
   title: string;
   author: string;
   publisher: string;
@@ -11,14 +11,14 @@ export type SearchInputT = {
 export type BookHeader = {
   id: string;
   title: string;
-  authors: string;
+  authors: string[];
   description: string;
   published_date: string;
   thumbnail: string;
   preview_link: string;
 };
 
-export type BookDetailT = {
+export type BookDetailInfo = {
   title: string;
   subtitle: string;
   authors: string[];
@@ -63,7 +63,7 @@ export type BookVolume = {
   id: string;
   etag: string;
   selfLink: string;
-  volumeInfo: BookDetailT;
+  volumeInfo: BookDetailInfo;
   layerInfo?: {
     layers: {
       layerId: string;

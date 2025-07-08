@@ -5,7 +5,7 @@ import { fetchBooks } from "../service/api";
 import BookCard from "../feature/bookCard/BookCard";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
-import { SearchInputT } from "../util/typeUtil";
+import { SearchFormValues } from "../util/typeUtil";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +19,7 @@ const SearchPage = () => {
   const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
   const queryString = searchParams.toString();
 
-  const lastSearchRef = useRef<SearchInputT>({
+  const lastSearchRef = useRef<SearchFormValues>({
     title: "",
     author: "",
     publisher: "",
@@ -43,7 +43,7 @@ const SearchPage = () => {
     { id: 4, name: "subject", value: subject, fn: setSubject },
   ];
 
-  const performSearch = async (params: SearchInputT, pageNum = 1) => {
+  const performSearch = async (params: SearchFormValues, pageNum = 1) => {
     setLoading(true);
     setError("");
     try {
@@ -76,7 +76,7 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
-    const params: SearchInputT = {
+    const params: SearchFormValues = {
       title: searchParams.get("title") || "",
       author: searchParams.get("author") || "",
       publisher: searchParams.get("publisher") || "",
