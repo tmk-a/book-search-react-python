@@ -6,6 +6,7 @@ import BookCard from "../feature/bookCard/BookCard";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchFormValues } from "../util/typeUtil";
+import FadeLoader from "react-spinners/FadeLoader";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,7 +28,9 @@ const SearchPage = () => {
     keyword: "",
   });
   const [books, setBooks] = useState<BookHeader[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loading = isInitialLoading || isLoadingMore;
   const [error, setError] = useState("");
   const [page, setPage] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -43,9 +46,18 @@ const SearchPage = () => {
     { id: 4, name: "subject", value: subject, fn: setSubject },
   ];
 
+  // Performs a search based on the given parameters and updates the book list.
+  // Handles both initial search and loading more results (pagination).
   const performSearch = async (params: SearchFormValues, pageNum = 1) => {
-    setLoading(true);
+    if (pageNum === 1) {
+      setIsInitialLoading(true);
+      setIsLoadingMore(false);
+    } else {
+      setIsInitialLoading(false);
+      setIsLoadingMore(true);
+    }
     setError("");
+
     try {
       const data = await fetchBooks(params, pageNum, pageSize);
       if (pageNum === 1) {
@@ -59,9 +71,16 @@ const SearchPage = () => {
     } catch (err) {
       setError("Error fetching books");
     } finally {
-      setLoading(false);
+      if (pageNum === 1) {
+        setIsInitialLoading(false);
+      } else {
+        setIsLoadingMore(false);
+      }
     }
   };
+
+  // Called when the user submits the search form.
+  // Filters out empty values, updates URL params, and performs the search.
   const handleSearch = () => {
     if (!keyword && !title && !author && !publisher && !subject) return;
 
@@ -75,6 +94,8 @@ const SearchPage = () => {
     performSearch(params, 1);
   };
 
+  // On initial render, if there are search parameters in the URL,
+  // populate the form fields and perform the search.
   useEffect(() => {
     const params: SearchFormValues = {
       title: searchParams.get("title") || "",
@@ -96,11 +117,13 @@ const SearchPage = () => {
     }
   }, []);
 
+  // Set up IntersectionObserver for infinite scroll.
+  // When the #sentinel element becomes visible, load the next page.
   useEffect(() => {
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !loading && hasMore) {
+      if (entries[0].isIntersecting && !isLoadingMore && hasMore) {
         setPage((prev) => prev + 1);
       }
     });
@@ -111,8 +134,10 @@ const SearchPage = () => {
     return () => {
       if (observer.current) observer.current.disconnect();
     };
-  }, [loading, hasMore]);
+  }, [isLoadingMore, hasMore]);
 
+  // When the page number changes (due to scroll),
+  // fetch and append the next set of results.
   useEffect(() => {
     if (page === 1) return;
 
@@ -165,7 +190,17 @@ const SearchPage = () => {
           </p>
         )}
         <div className="search-result__books-container">
-          {books.length > 0 ? (
+          {isInitialLoading ? (
+            <div className="spinner">
+              <FadeLoader
+                height={20}
+                margin={5}
+                radius={5}
+                width={5}
+                color="#6c8e7d"
+              />
+            </div>
+          ) : books.length > 0 ? (
             books.map((book: BookHeader) => (
               <BookCard
                 key={book.id}
@@ -175,6 +210,18 @@ const SearchPage = () => {
             ))
           ) : (
             <p>No books found</p>
+          )}
+
+          {isLoadingMore && (
+            <div className="spinner">
+              <FadeLoader
+                height={20}
+                margin={5}
+                radius={5}
+                width={5}
+                color="#6c8e7d"
+              />
+            </div>
           )}
           <div id="sentinel" style={{ height: "1px" }} />
         </div>
