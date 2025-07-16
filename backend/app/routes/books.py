@@ -27,7 +27,7 @@ def search_books(
     subject: str = Query(None),
     keyword: str = Query(None),
     page: int = Query(1, ge=1),
-    page_size: int = Query(20, ge=1, le=40)
+    page_size: int = Query(10, ge=1, le=40)
 ):
     result,status = fetch_books(title, author, publisher, subject, keyword, page, page_size)
 

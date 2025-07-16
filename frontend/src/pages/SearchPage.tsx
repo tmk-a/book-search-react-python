@@ -38,7 +38,7 @@ const SearchPage = () => {
   const [hasMore, setHasMore] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
-  const pageSize = 20;
+  const pageSize = 10;
   const inputItems = [
     { id: 1, name: "title", value: title, fn: setTitle },
     { id: 2, name: "author", value: author, fn: setAuthor },
