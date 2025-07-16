@@ -2,7 +2,7 @@ import requests
 
 GOOGLE_BOOKS_API = "https://www.googleapis.com/books/v1/volumes"
 
-def fetch_books(title=None, author=None, publisher=None, subject=None, keyword=None, page=1, page_size=20):
+def fetch_books(title=None, author=None, publisher=None, subject=None, keyword=None, page=1, page_size=10):
     filters = []
     books = []
     
