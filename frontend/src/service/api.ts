@@ -4,7 +4,7 @@ const API_BASE_URL = "https://book-search-react-python.onrender.com";
 export const fetchBooks = async (
   { title, author, publisher, subject, keyword }: SearchFormValues,
   pageNum = 1,
-  pageSize = 20
+  pageSize = 10
 ) => {
   const res = await fetch(
     `${API_BASE_URL}/search?title=${title}&author=${author}&publisher=${publisher}&subject=${subject}&keyword=${keyword}&page=${pageNum}&page_size=${pageSize}`
