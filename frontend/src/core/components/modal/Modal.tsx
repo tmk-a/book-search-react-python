@@ -38,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
       }`}
     >
       <div className={`${BASE_CLASS}__panel`}>
-        <button className={`${BASE_CLASS}__close`} onClick={onClose}>
+        <button className={`${BASE_CLASS}__close-button`} onClick={onClose}>
           <X />
         </button>
         {children}
