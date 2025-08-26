@@ -1,12 +1,12 @@
 import "./SearchPage.scss";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchBooks } from "../service/api";
-import BookCard from "../feature/bookCard/BookCard";
-import { BookHeader } from "../util/typeUtil";
-import { SearchInput } from "../core/components/input/SearchInput";
-import { SearchFormValues } from "../util/typeUtil";
-import FadeLoader from "react-spinners/FadeLoader";
+import { fetchBooks } from "../../service/api";
+import { BookHeader } from "../../util/typeUtil";
+import { SearchFormValues } from "../../util/typeUtil";
+import AdvancedSearchModal from "../../features/advancedSearchModal/AdvancedSearchModal";
+import SearchSection from "./components/SearchSection";
+import SearchResultSection from "./components/SearchResultSection";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,15 +36,10 @@ const SearchPage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [isResultLimited, setIsResultLimited] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const pageSize = 10;
-  const inputItems = [
-    { id: 1, name: "title", value: title, fn: setTitle },
-    { id: 2, name: "author", value: author, fn: setAuthor },
-    { id: 3, name: "publisher", value: publisher, fn: setPublisher },
-    { id: 4, name: "subject", value: subject, fn: setSubject },
-  ];
 
   // Performs a search based on the given parameters and updates the book list.
   // Handles both initial search and loading more results (pagination).
@@ -81,17 +76,45 @@ const SearchPage = () => {
 
   // Called when the user submits the search form.
   // Filters out empty values, updates URL params, and performs the search.
-  const handleSearch = () => {
-    if (!keyword && !title && !author && !publisher && !subject) return;
+  const handleSearch = (overrideParams?: string | SearchFormValues) => {
+    let effectiveParams: SearchFormValues;
+    if (typeof overrideParams === "string") {
+      effectiveParams = {
+        title,
+        author,
+        publisher,
+        subject,
+        keyword: overrideParams,
+      };
+    } else {
+      effectiveParams = overrideParams ?? {
+        title,
+        author,
+        publisher,
+        subject,
+        keyword,
+      };
+    }
 
-    const params = { title, author, publisher, subject, keyword };
+    if (
+      !effectiveParams.keyword &&
+      !effectiveParams.title &&
+      !effectiveParams.author &&
+      !effectiveParams.publisher &&
+      !effectiveParams.subject
+    ) {
+      alert("Please enter your search criteria");
+      return;
+    }
 
     setSearchParams(
-      Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ""))
+      Object.fromEntries(
+        Object.entries(effectiveParams).filter(([_, v]) => v !== "")
+      )
     );
 
-    lastSearchRef.current = params;
-    performSearch(params, 1);
+    lastSearchRef.current = effectiveParams;
+    performSearch(effectiveParams, 1);
   };
 
   // On initial render, if there are search parameters in the URL,
@@ -151,81 +174,37 @@ const SearchPage = () => {
 
   return (
     <div className="contents-container">
-      <div className="search-container">
-        <h1>What do you want to read?</h1>
-        <div className="search-container__input">
-          <div className="search-container__input-item">
-            <label>keyword</label>
-            <SearchInput
-              query={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              name={"keyword"}
-            />
-          </div>
-          <div className="search-container__input-items">
-            {inputItems.map((input) => (
-              <div key={input.id} className="search-container__input-item">
-                <label>{input.name}</label>
-                <SearchInput
-                  query={input.value}
-                  onChange={(e) => input.fn(e.target.value)}
-                  name={input.name}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="search-container__input-bottom">
-            <button onClick={handleSearch} disabled={loading}>
-              {loading ? "Searching..." : "Search"}
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="search-result__container">
-        <p className="search-result__count">{totalItems} results</p>
-        {error && <div>{error}</div>}
-        {isResultLimited && (
-          <p>
-            Note: Only the first 1000 results can be accessed due to API limits.
-          </p>
-        )}
-        <div className="search-result__books-container">
-          {isInitialLoading ? (
-            <div className="spinner">
-              <FadeLoader
-                height={20}
-                margin={5}
-                radius={5}
-                width={5}
-                color="#6c8e7d"
-              />
-            </div>
-          ) : books.length > 0 ? (
-            books.map((book: BookHeader) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                queryString={queryString ? `?${queryString}` : ""}
-              />
-            ))
-          ) : (
-            <p>No books found</p>
-          )}
-
-          {isLoadingMore && (
-            <div className="spinner">
-              <FadeLoader
-                height={20}
-                margin={5}
-                radius={5}
-                width={5}
-                color="#6c8e7d"
-              />
-            </div>
-          )}
-          <div id="sentinel" style={{ height: "1px" }} />
-        </div>
-      </div>
+      <SearchSection
+        keyword={keyword}
+        setKeyword={setKeyword}
+        loading={loading}
+        onSearch={() => handleSearch(keyword)}
+        onOpenAdvanced={() => setIsModalOpen(true)}
+      />
+      <SearchResultSection
+        books={books}
+        totalItems={totalItems}
+        error={error}
+        isInitialLoading={isInitialLoading}
+        isLoadingMore={isLoadingMore}
+        isResultLimited={isResultLimited}
+        queryString={queryString}
+      />
+      <AdvancedSearchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialParams={{
+          title: searchParams.get("title") || "",
+          author: searchParams.get("author") || "",
+          publisher: searchParams.get("publisher") || "",
+          subject: searchParams.get("subject") || "",
+          keyword: searchParams.get("keyword") || "",
+        }}
+        onApply={(newParams: SearchFormValues) => {
+          setIsModalOpen(false);
+          handleSearch(newParams);
+        }}
+      />
     </div>
   );
 };

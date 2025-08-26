@@ -1,0 +1,31 @@
+@use "../../../core/style/variables" as *;
+@use "../../../core/style/responsive" as *;
+@use "sass:color";
+
+.search-result {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 60rem;
+
+    p {
+      color: $text-color;
+    }
+  }
+
+  &__books-container {
+    display: grid;
+    gap: 2rem;
+
+    @include responsive-property(
+      grid-template-columns,
+      repeat(1, minmax(0, 1fr)),
+      repeat(2, minmax(0, 1fr)),
+      repeat(3, minmax(0, 1fr)),
+      repeat(4, minmax(0, 1fr)),
+      repeat(5, minmax(0, 1fr))
+    );
+  }
+}

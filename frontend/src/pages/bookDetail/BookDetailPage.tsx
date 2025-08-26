@@ -1,8 +1,8 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { BookVolume } from "../util/typeUtil";
-import { fetchBookDetail } from "../service/api";
-import BookDetail from "../feature/bookDetail/BookDetail";
+import { BookVolume } from "../../util/typeUtil";
+import { fetchBookDetail } from "../../service/api";
+import BookDetail from "../../features/bookDetail/BookDetail";
 
 const BookDetailPage = () => {
   const { id } = useParams<string>();
