@@ -36,14 +36,13 @@ const SearchSection = ({
           <Button
             name="Advanced Search"
             onclick={onOpenAdvanced}
-            className={`${BASE_CLASS}__advance-search-button`}
+            className="advance-search-button"
           />
           <Button
             name={loading ? "Searching..." : "Search"}
             onclick={onSearch}
-            // onclick={() => handleSearch(keyword)}
             disabled={loading}
-            className={`${BASE_CLASS}__search-button`}
+            className="search-button"
           />
         </div>
       </div>

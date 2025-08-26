@@ -46,7 +46,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           />
         </label>
       ))}
-      <Button type="submit" name="Search" />
+      <Button type="submit" name="Search" className="search-button" />
     </form>
   );
 };
