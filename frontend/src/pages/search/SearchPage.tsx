@@ -102,8 +102,10 @@ const SearchPage = () => {
       !effectiveParams.author &&
       !effectiveParams.publisher &&
       !effectiveParams.subject
-    )
+    ) {
+      alert("Please enter your search criteria");
       return;
+    }
 
     setSearchParams(
       Object.fromEntries(
