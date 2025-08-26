@@ -6,7 +6,9 @@ import BookCard from "../feature/bookCard/BookCard";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchFormValues } from "../util/typeUtil";
+import AdvancedSearchModal from "../feature/advancedSearchModal/AdvancedSearchModal";
 import FadeLoader from "react-spinners/FadeLoader";
+import { Button } from "../core/components/button/Button";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,15 +38,10 @@ const SearchPage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [isResultLimited, setIsResultLimited] = useState(false);
   const [hasMore, setHasMore] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const observer = useRef<IntersectionObserver | null>(null);
   const pageSize = 10;
-  const inputItems = [
-    { id: 1, name: "title", value: title, fn: setTitle },
-    { id: 2, name: "author", value: author, fn: setAuthor },
-    { id: 3, name: "publisher", value: publisher, fn: setPublisher },
-    { id: 4, name: "subject", value: subject, fn: setSubject },
-  ];
 
   // Performs a search based on the given parameters and updates the book list.
   // Handles both initial search and loading more results (pagination).
@@ -81,17 +78,43 @@ const SearchPage = () => {
 
   // Called when the user submits the search form.
   // Filters out empty values, updates URL params, and performs the search.
-  const handleSearch = () => {
-    if (!keyword && !title && !author && !publisher && !subject) return;
+  const handleSearch = (overrideParams?: string | SearchFormValues) => {
+    let effectiveParams: SearchFormValues;
+    if (typeof overrideParams === "string") {
+      effectiveParams = {
+        title,
+        author,
+        publisher,
+        subject,
+        keyword: overrideParams,
+      };
+    } else {
+      effectiveParams = overrideParams ?? {
+        title,
+        author,
+        publisher,
+        subject,
+        keyword,
+      };
+    }
 
-    const params = { title, author, publisher, subject, keyword };
+    if (
+      !effectiveParams.keyword &&
+      !effectiveParams.title &&
+      !effectiveParams.author &&
+      !effectiveParams.publisher &&
+      !effectiveParams.subject
+    )
+      return;
 
     setSearchParams(
-      Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== ""))
+      Object.fromEntries(
+        Object.entries(effectiveParams).filter(([_, v]) => v !== "")
+      )
     );
 
-    lastSearchRef.current = params;
-    performSearch(params, 1);
+    lastSearchRef.current = effectiveParams;
+    performSearch(effectiveParams, 1);
   };
 
   // On initial render, if there are search parameters in the URL,
@@ -155,29 +178,27 @@ const SearchPage = () => {
         <h1>What do you want to read?</h1>
         <div className="search-container__input">
           <div className="search-container__input-item">
-            <label>keyword</label>
             <SearchInput
+              type="search"
               query={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               name={"keyword"}
+              placeholder={"Enter a keyword..."}
             />
           </div>
-          <div className="search-container__input-items">
-            {inputItems.map((input) => (
-              <div key={input.id} className="search-container__input-item">
-                <label>{input.name}</label>
-                <SearchInput
-                  query={input.value}
-                  onChange={(e) => input.fn(e.target.value)}
-                  name={input.name}
-                />
-              </div>
-            ))}
-          </div>
           <div className="search-container__input-bottom">
-            <button onClick={handleSearch} disabled={loading}>
-              {loading ? "Searching..." : "Search"}
-            </button>
+            <Button
+              name="Advanced Search"
+              onclick={() => {
+                setIsModalOpen(true);
+              }}
+              className="search-container__advance-searchBt"
+            />
+            <Button
+              name={loading ? "Searching..." : "Search"}
+              onclick={() => handleSearch(keyword)}
+              disabled={loading}
+            />
           </div>
         </div>
       </div>
@@ -226,6 +247,22 @@ const SearchPage = () => {
           <div id="sentinel" style={{ height: "1px" }} />
         </div>
       </div>
+      <AdvancedSearchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialParams={{
+          title: searchParams.get("title") || "",
+          author: searchParams.get("author") || "",
+          publisher: searchParams.get("publisher") || "",
+          subject: searchParams.get("subject") || "",
+          keyword: searchParams.get("keyword") || "",
+        }}
+        onApply={(newParams: SearchFormValues) => {
+          setSearchParams(newParams);
+          setIsModalOpen(false);
+          handleSearch(newParams);
+        }}
+      />
     </div>
   );
 };

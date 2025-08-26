@@ -19,53 +19,32 @@ const SearchForm: React.FC<SearchFormProps> = ({
   onChange,
   onSubmit,
 }) => {
+  const inputItems = [
+    { id: 1, inputTitle: "Title", name: "title", value: values.title },
+    { id: 2, inputTitle: "Author", name: "author", value: values.author },
+    {
+      id: 3,
+      inputTitle: "Publisher",
+      name: "publisher",
+      value: values.publisher,
+    },
+    { id: 4, inputTitle: "Subject", name: "subject", value: values.subject },
+  ];
+
   return (
     <form onSubmit={onSubmit} className={`${BASE_CLASS}`}>
-      <label className={`${BASE_CLASS}__item`}>
-        Keyword
-        <SearchInput
-          type="text"
-          query={values.keyword}
-          onChange={onChange}
-          name="keyword"
-        />
-      </label>
-      <label className={`${BASE_CLASS}__item`}>
-        Title
-        <SearchInput
-          type="text"
-          query={values.title}
-          onChange={onChange}
-          name="title"
-        />
-      </label>
-      <label className={`${BASE_CLASS}__item`}>
-        Author
-        <SearchInput
-          type="text"
-          query={values.author}
-          onChange={onChange}
-          name="author"
-        />
-      </label>
-      <label className={`${BASE_CLASS}__item`}>
-        Publisher
-        <SearchInput
-          type="text"
-          query={values.publisher}
-          onChange={onChange}
-          name="publisher"
-        />
-      </label>
-      <label className={`${BASE_CLASS}__item`}>
-        Subject
-        <SearchInput
-          type="text"
-          query={values.subject}
-          onChange={onChange}
-          name="subject"
-        />
-      </label>
+      {inputItems.map((inputItem) => (
+        <label className={`${BASE_CLASS}__item`}>
+          {inputItem.inputTitle}
+          <SearchInput
+            key={inputItem.id}
+            type="search"
+            query={inputItem.value}
+            onChange={onChange}
+            name={inputItem.name}
+          />
+        </label>
+      ))}
       <Button type="submit" name="Search" />
     </form>
   );
