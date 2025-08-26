@@ -2,11 +2,11 @@ import "./SearchPage.scss";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchBooks } from "../service/api";
-import BookCard from "../feature/bookCard/BookCard";
+import BookCard from "../features/bookCard/BookCard";
 import { BookHeader } from "../util/typeUtil";
 import { SearchInput } from "../core/components/input/SearchInput";
 import { SearchFormValues } from "../util/typeUtil";
-import AdvancedSearchModal from "../feature/advancedSearchModal/AdvancedSearchModal";
+import AdvancedSearchModal from "../features/advancedSearchModal/AdvancedSearchModal";
 import FadeLoader from "react-spinners/FadeLoader";
 import { Button } from "../core/components/button/Button";
 
@@ -192,12 +192,13 @@ const SearchPage = () => {
               onclick={() => {
                 setIsModalOpen(true);
               }}
-              className="search-container__advance-searchBt"
+              className="search-container__advance-search-button"
             />
             <Button
               name={loading ? "Searching..." : "Search"}
               onclick={() => handleSearch(keyword)}
               disabled={loading}
+              className="search-container__search-button"
             />
           </div>
         </div>
