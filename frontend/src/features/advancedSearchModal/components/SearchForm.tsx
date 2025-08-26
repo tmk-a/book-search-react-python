@@ -20,15 +20,16 @@ const SearchForm: React.FC<SearchFormProps> = ({
   onSubmit,
 }) => {
   const inputItems = [
-    { id: 1, inputTitle: "Title", name: "title", value: values.title },
-    { id: 2, inputTitle: "Author", name: "author", value: values.author },
+    { id: 1, inputTitle: "Keyword", name: "keyword", value: values.keyword },
+    { id: 2, inputTitle: "Title", name: "title", value: values.title },
+    { id: 3, inputTitle: "Author", name: "author", value: values.author },
     {
-      id: 3,
+      id: 4,
       inputTitle: "Publisher",
       name: "publisher",
       value: values.publisher,
     },
-    { id: 4, inputTitle: "Subject", name: "subject", value: values.subject },
+    { id: 5, inputTitle: "Subject", name: "subject", value: values.subject },
   ];
 
   return (
