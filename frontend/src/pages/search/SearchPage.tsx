@@ -201,7 +201,6 @@ const SearchPage = () => {
           keyword: searchParams.get("keyword") || "",
         }}
         onApply={(newParams: SearchFormValues) => {
-          setSearchParams(newParams);
           setIsModalOpen(false);
           handleSearch(newParams);
         }}
