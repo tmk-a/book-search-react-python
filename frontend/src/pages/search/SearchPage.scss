@@ -1,0 +1,22 @@
+@use "../../core/style/variables" as *;
+@use "../../core/style/responsive" as *;
+@use "sass:color";
+
+.contents-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $bg-color;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  padding: $padding;
+  gap: 5rem;
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: $text-color;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+}

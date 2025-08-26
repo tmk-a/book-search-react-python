@@ -1,14 +1,12 @@
 import "./SearchPage.scss";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchBooks } from "../service/api";
-import BookCard from "../features/bookCard/BookCard";
-import { BookHeader } from "../util/typeUtil";
-import { SearchInput } from "../core/components/input/SearchInput";
-import { SearchFormValues } from "../util/typeUtil";
-import AdvancedSearchModal from "../features/advancedSearchModal/AdvancedSearchModal";
-import FadeLoader from "react-spinners/FadeLoader";
-import { Button } from "../core/components/button/Button";
+import { fetchBooks } from "../../service/api";
+import { BookHeader } from "../../util/typeUtil";
+import { SearchFormValues } from "../../util/typeUtil";
+import AdvancedSearchModal from "../../features/advancedSearchModal/AdvancedSearchModal";
+import SearchSection from "./components/SearchSection";
+import SearchResultSection from "./components/SearchResultSection";
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -174,80 +172,22 @@ const SearchPage = () => {
 
   return (
     <div className="contents-container">
-      <div className="search-container">
-        <h1>What do you want to read?</h1>
-        <div className="search-container__input">
-          <div className="search-container__input-item">
-            <SearchInput
-              type="search"
-              query={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              name={"keyword"}
-              placeholder={"Enter a keyword..."}
-            />
-          </div>
-          <div className="search-container__input-bottom">
-            <Button
-              name="Advanced Search"
-              onclick={() => {
-                setIsModalOpen(true);
-              }}
-              className="search-container__advance-search-button"
-            />
-            <Button
-              name={loading ? "Searching..." : "Search"}
-              onclick={() => handleSearch(keyword)}
-              disabled={loading}
-              className="search-container__search-button"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="search-result__container">
-        <p className="search-result__count">{totalItems} results</p>
-        {error && <div>{error}</div>}
-        {isResultLimited && (
-          <p>
-            Note: Only the first 1000 results can be accessed due to API limits.
-          </p>
-        )}
-        <div className="search-result__books-container">
-          {isInitialLoading ? (
-            <div className="spinner">
-              <FadeLoader
-                height={20}
-                margin={5}
-                radius={5}
-                width={5}
-                color="#6c8e7d"
-              />
-            </div>
-          ) : books.length > 0 ? (
-            books.map((book: BookHeader) => (
-              <BookCard
-                key={book.id}
-                book={book}
-                queryString={queryString ? `?${queryString}` : ""}
-              />
-            ))
-          ) : (
-            <p>No books found</p>
-          )}
-
-          {isLoadingMore && (
-            <div className="spinner">
-              <FadeLoader
-                height={20}
-                margin={5}
-                radius={5}
-                width={5}
-                color="#6c8e7d"
-              />
-            </div>
-          )}
-          <div id="sentinel" style={{ height: "1px" }} />
-        </div>
-      </div>
+      <SearchSection
+        keyword={keyword}
+        setKeyword={setKeyword}
+        loading={loading}
+        onSearch={() => handleSearch(keyword)}
+        onOpenAdvanced={() => setIsModalOpen(true)}
+      />
+      <SearchResultSection
+        books={books}
+        totalItems={totalItems}
+        error={error}
+        isInitialLoading={isInitialLoading}
+        isLoadingMore={isLoadingMore}
+        isResultLimited={isResultLimited}
+        queryString={queryString}
+      />
       <AdvancedSearchModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
